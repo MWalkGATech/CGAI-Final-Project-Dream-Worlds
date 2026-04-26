@@ -38,11 +38,7 @@ def SSIM(prediction, target, window_size=11, size_average=True, device='cpu') ->
     return ssim_map.mean() if size_average else ssim_map.mean(1).mean(1).mean(1)
 
 
-def loss_results(prediction, target, lam=.8, add_ssim=True, window_size=11, size_average=True, device='cpu') -> torch.Tensor:
-    d_ssim = torch.tensor(0)
-    if add_ssim:
-        d_ssim = (1 - SSIM(prediction, target, window_size=window_size, size_average=size_average, device=device)).squeeze(0)
-    else:
-        lam = 1.
+def loss_results(prediction, target, lam=.2, window_size=11, size_average=True, device='cpu') -> torch.Tensor:
+    d_ssim = (1 - SSIM(prediction, target, window_size=window_size, size_average=size_average, device=device)).squeeze(0)
     
-    return nn.functional.l1_loss(prediction, target) * lam + d_ssim.item() * (1 - lam)
+    return nn.functional.l1_loss(prediction, target) * (1 - lam) + d_ssim.item() * lam
