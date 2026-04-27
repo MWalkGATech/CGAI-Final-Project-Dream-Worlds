@@ -46,7 +46,7 @@ def loss_results(prediction, target, lam=.2, window_size=11, size_average=True, 
 
 
 def build_sigma_inv(quat: torch.Tensor, sigma: torch.Tensor):
-    # found the conversion here: https://www.johndcook.com/blog/2025/05/07/quaternions-and-rotation-matrices/
+    # found the conversion here: https://arxiv.org/pdf/2308.04079
     quat = nn.functional.normalize(quat)
     w_2 = quat[0] * quat[0]
     x_2 = quat[1] * quat[1]
@@ -60,10 +60,10 @@ def build_sigma_inv(quat: torch.Tensor, sigma: torch.Tensor):
     wx = quat[0] * quat[1]
     yz = quat[2] * quat[3]
 
-    R = torch.Tensor([
-        [2 * (w_2 + x_2) - 1, 2 * (xy - wz), 2 * (xz + wy)],
-        [2 * (xy + wz), 2 * (w_2 + y_2) - 1, 2 * (xz - wx)],
-        [2 * (xz - wy), 2 * (yz + wx), 2 * (w_2 + z_2) - 1],
+    R = 2 * torch.Tensor([
+        [(w_2 + x_2) - 1, (xy - wz), (xz + wy)],
+        [(xy + wz), (w_2 + y_2) - 1, (xz - wx)],
+        [(xz - wy), (yz + wx), (w_2 + z_2) - 1],
     ], device=quat.device)
 
     S = torch.eye(3, device=sigma.device)
@@ -73,3 +73,8 @@ def build_sigma_inv(quat: torch.Tensor, sigma: torch.Tensor):
     S *= 1 / sigma_square_safe
 
     return R @ S @ R.T
+
+
+def gauss_3d(x: torch.Tensor, mu: torch.Tensor, sigma_inv: torch.Tensor) -> torch.Tensor:
+    x_mu = x - mu
+    return torch.exp(-.5 * x_mu.T @ sigma_inv * x_mu).sum(-1)
