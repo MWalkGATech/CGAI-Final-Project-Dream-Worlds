@@ -1,4 +1,5 @@
 import math
+import pycolmap
 import torch
 from torch import nn
 
@@ -46,6 +47,7 @@ def loss_results(prediction, target, lam=.2, window_size=11, size_average=True, 
 
 def build_sigma_inv(quat: torch.Tensor, sigma: torch.Tensor):
     # found the conversion here: https://www.johndcook.com/blog/2025/05/07/quaternions-and-rotation-matrices/
+    quat = nn.functional.normalize(quat)
     w_2 = quat[0] * quat[0]
     x_2 = quat[1] * quat[1]
     y_2 = quat[2] * quat[2]
