@@ -48,10 +48,13 @@ Suggested future additions:
 
 The exact stack may change during implementation, but the current baseline assumptions are:
 
-- Git
+- Git. When cloning this repository, run `git clone https://github.com/MWalkGATech/CGAI-Final-Project-Dream-Worlds --recursive`. If you forget to do this, run `git pull --recurse-submodules`
 - Python 3.10 or newer
 - `pip` or Conda for dependency management
-- A machine with an NVIDIA GPU is recommended if the implementation relies on CUDA acceleration
+- A machine with an NVIDIA GPU for running the gaussian-splatting project
+  - if your graphics card is 50xx or better, you will need 12.8 and some changes need to be made to the gaussian-splatting projects as well as run differently, the following explains this setup
+    - Must run this on a Linux machine or in WSL on Windows. Though the original project was run on Windows, the changes made to the versions of pytorch that work with Cuda 12.8 make it near impossible to get it to compile without a lot of pain
+    - In the [diff-gaussian-rasterization]
 - A report-writing workflow such as LaTeX, Overleaf, or a similar editor
 
 ## Technologies
