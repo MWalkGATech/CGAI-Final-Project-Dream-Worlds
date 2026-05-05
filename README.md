@@ -48,24 +48,13 @@ Suggested future additions:
 
 The exact stack may change during implementation, but the current baseline assumptions are:
 
-- Git. When cloning this repository, run `git clone https://github.com/MWalkGATech/CGAI-Final-Project-Dream-Worlds --recursive`. If you forget to do this, run `git pull --recurse-submodules` (or `git submodule update --init --recursive` if that doesn't work for some reason)
+- Git.
 - Python 3.10 or newer
 - `pip` for dependency management
-- `conda` or `venv` for virtual environments, recommending `conda`
+- `conda` for virtual environment (I suppose you can use `venv` if you really want to but conda will make things so much easier)
 - A machine with an NVIDIA GPU for running the gaussian-splatting project
-  - if your graphics card is 50xx or better, you will need 12.8 and some changes need to be made to the gaussian-splatting projects as well, the following explains this setup
-    - Must run this on a Linux machine or in WSL on Windows. Though the original project was run on Windows, the changes made to the versions of pytorch that work with Cuda 12.8 make it near impossible to get it to compile without a lot of pain
-    - In the [rasterizer_impl.h](./gaussian-splatting/submodules/diff-gaussian-rasterization/cuda_rasterizer/rasterizer_impl.h) file, at the top, add the line `#include <cstdint>`. This is may be more of an issue on WSL machines, but sometimes, the `nvcc` will not find all the C library files in your Linux install. This guarantees it will.
-    - In the [simple_knn.cu](./gaussian-splatting/submodules/simple-knn/simple_knn.cu) add the following line `#include <float.h>` to include floats
-    - using Anaconda, we create and activate our environment
-      - `conda env create --file environment.yml -y`
-      - `conda activate gaussian_splatting`
-    - install torch from the official index: `pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128`
-    - install remaining requirements: `pip install -r requirements.txt --no-build-isolation`
-    - sources: 
-      - [Successfully installed on Windows 11 with Nvidia RTX 5090 + CUDA 12.8](https://github.com/graphdeco-inria/gaussian-splatting/issues/1215)
-      - [Stable Training & Visualization Setup for RTX 50-Series (CUDA 12.8, WSL2 + Windows)](https://github.com/graphdeco-inria/gaussian-splatting/issues/1313)
-    - If you don't run the pip install for the gaussian submodules from inside their folders, be sure to add `--no-build-isolation` to the call or they will fail
+  - if your graphics card is 50xx or better, you will need cuda 12.8
+  - if you are using cuda 12.8, use Linux or WSL on Windows. Though the original project was run on Windows, the changes made to the versions of pytorch that work with Cuda 12.8 make it near impossible to get it to compile without a lot of pain
 
 - A report-writing workflow such as LaTeX, Overleaf, or a similar editor
 
@@ -85,17 +74,28 @@ The project is expected to use a focused subset of the following technologies:
 Use the following commands to bootstrap the repository locally:
 
 ```bash
-git clone <repo-url>
-cd CGAI-Final-Project
+git clone https://github.com/MWalkGATech/CGAI-Final-Project-Dream-Worlds.git --recursive
+# If you forget to do this, run `git pull --recurse-submodules` (or `git submodule update --init --recursive` if that doesn't work for some reason)
+cd CGAI-Final-Project-Dream-Worlds
 
-python3 -m venv .venv
-source .venv/bin/activate
+# create the environment here
+conda env create --file environment.yml -y
+conda activate gaussian_splatting
 
-pip install --upgrade pip
-if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+# This will get the correct version of torch for 12.8, if you need a lower version, you will want to update the env file to use that version of the toolkit
+# and replace the cu128 with the appropriate version. Lowest acceptable version is 11.6
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+
+# this installs the remaining packages as well as builds the 3 GS submodules.
+pip install -r requirements.txt --no-build-isolation
 ```
 
-As the codebase is added, this section will expand with the shortest path for running the baseline experiment and reproducing report figures.
+The repository has submodules to forks of the original gaussian splatting repo as changes were necessary to get it to run on more recent systems. original source is [here](https://github.com/graphdeco-inria/gaussian-splatting). Modified source uses a newer version of the simple-knn that includes the necessary float import found on github proper, and a modified rasterizer that includes the missing cstdint library that allows those two to compile through `pip`.
+
+changes were sourced from these posts:
+- [Successfully installed on Windows 11 with Nvidia RTX 5090 + CUDA 12.8](https://github.com/graphdeco-inria/gaussian-splatting/issues/1215)
+- [Stable Training & Visualization Setup for RTX 50-Series (CUDA 12.8, WSL2 + Windows)](https://github.com/graphdeco-inria/gaussian-splatting/issues/1313)
+
 
 ## Advanced Usage
 
