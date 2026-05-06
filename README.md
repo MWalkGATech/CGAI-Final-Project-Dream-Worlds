@@ -34,6 +34,10 @@ This project is being developed for the CGAI Dream Worlds final project under th
 
 Course deadline: May 7, 2026 at 11:59 pm ET.
 
+## DATA
+
+[Pretrained Sources that work](https://drive.google.com/drive/folders/1Bl51dHBoTt08T3RBtslM93UIIk9C_gSB?usp=sharing)
+
 ## Visuals
 
 Visual results, comparison figures, and simulation clips will be added here as the implementation matures.
