@@ -86,6 +86,8 @@ cd CGAI-Final-Project-Dream-Worlds
 conda env create --file environment.yml -y
 conda activate gaussian_splatting
 
+export TORCH_CUDA_ARCH_LIST="12.0"
+
 # This will get the correct version of torch for 12.8, if you need a lower version, you will want to update the env file to use that version of the toolkit
 # and replace the cu128 with the appropriate version. Lowest acceptable version is 11.6
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
@@ -94,7 +96,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 pip install -r requirements.txt --no-build-isolation --upgrade
 ```
 
-The repository uses a fork of the [original source](https://github.com/graphdeco-inria/gaussian-splatting), found [here](). Modified source uses a newer version of the simple-knn that includes the necessary float import found on github proper, and a modified rasterizer that includes the missing cstdint library that allows those two to compile through `pip`.
+The repository uses a fork of the [original source](https://github.com/graphdeco-inria/gaussian-splatting), found [here](https://github.com/yindaheng98/gaussian-splatting.git). Modified source uses a newer version of the simple-knn that includes the necessary float import found on github proper, and a modified rasterizer that includes the missing cstdint library that allows those two to compile through `pip`.
 
 changes were sourced from these posts:
 - [Successfully installed on Windows 11 with Nvidia RTX 5090 + CUDA 12.8](https://github.com/graphdeco-inria/gaussian-splatting/issues/1215)

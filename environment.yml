@@ -9,3 +9,4 @@ dependencies:
   - python=3.10
   - pip=25.2
   - tqdm
+  - gcc=13.4

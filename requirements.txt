@@ -2,7 +2,6 @@ matplotlib
 numpy
 pycolmap
 imageio
-cv2
 opencv-python
 joblib
 tensorboard
