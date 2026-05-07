@@ -7,7 +7,7 @@
 
 This repository contains our CGAI Dream Worlds final project on adding physical dynamics to Gaussian Splatting. We start from pretrained 3D Gaussian Splatting scene representations and study how simple physics-based updates can be applied to Gaussian primitives so that they exhibit motion while preserving recognizable visual structure.
 
-The current repository is a working prototype centered around one notebook, `notebooks/gaussian_splatting_physics.ipynb`, with two exploratory experiments and exported demo videos.
+The current repository is a notebook-first technical exploration centered around `notebooks/gaussian_splatting_physics.ipynb`, with four experiments and exported demo videos.
 
 ## Project Overview
 
@@ -28,9 +28,9 @@ Our implementation is deliberately smaller in scope. It focuses on exploratory m
 ## Current Prototype Status
 
 - One working notebook prototype: `notebooks/gaussian_splatting_physics.ipynb`
-- Two current experiments: wall smash and mass falling
-- Demo videos stored under `assets/demos/`
-- Local pretrained inputs and generated frames stored under `output/` and ignored by git
+- Four experiments: uniform gravity, randomized inverse-mass motion, wind-field deformation, and a wind-strength ablation
+- Five exported demo videos stored under `assets/demos/`
+- Local pretrained inputs and generated frame sequences stored under `output/` and ignored by git
 
 ## Repository Layout
 
@@ -39,6 +39,9 @@ Our implementation is deliberately smaller in scope. It focuses on exploratory m
 ├── assets/
 │   └── demos/
 │       ├── mass_falling.mp4
+│       ├── wind_field.mp4
+│       ├── wind_field_high.mp4
+│       ├── wind_field_low.mp4
 │       └── wall_smash.mp4
 ├── notebooks/
 │   └── gaussian_splatting_physics.ipynb
@@ -49,12 +52,15 @@ Our implementation is deliberately smaller in scope. It focuses on exploratory m
 │       ├── images/
 │       ├── point_cloud/
 │       └── results/
+│           ├── wind_field/
+│           ├── wind_field_high/
+│           └── wind_field_low/
 ├── README.md
 ├── environment.yml
 └── requirements.txt
 ```
 
-`output/` is used for local pretrained assets and generated frame sequences, so it is intentionally git-ignored.
+`output/` is used for local pretrained assets and generated frame sequences, so it is intentionally git-ignored. The experiment-specific subdirectories under `results/` are created when the wind experiments are run.
 
 ## Requirements
 
@@ -129,15 +135,18 @@ output/ficus_whitebg-trained/results/
 3. If you want a clean rerun, delete old rendered PNGs:
 
    ```bash
-   rm -f output/ficus_whitebg-trained/results/*.png
+   find output/ficus_whitebg-trained/results -type f -name '*.png' -delete
    ```
 
 4. Run the notebook from top to bottom.
-5. The render cells write PNG frames into `output/ficus_whitebg-trained/results/`.
+5. The render cells write PNG frames into `output/ficus_whitebg-trained/results/` and, for the wind experiments, into experiment-specific subdirectories under that folder.
 6. The export cells write demo videos to:
 
    - `assets/demos/wall_smash.mp4`
    - `assets/demos/mass_falling.mp4`
+   - `assets/demos/wind_field.mp4`
+   - `assets/demos/wind_field_low.mp4`
+   - `assets/demos/wind_field_high.mp4`
 
 ## Current Experiments
 
@@ -149,7 +158,15 @@ Applies uniform gravity in the negative `y` direction to all Gaussians and clamp
 
 Applies gravity in the negative `z` direction and scales motion by randomized inverse mass, then clamps positions into the range `[-10, 10]`.
 
-These experiments are simple baselines rather than full physical models. They are intended to provide a starting point for studying how direct motion updates affect the rendered appearance of pretrained Gaussian splats.
+### Wind Field
+
+Applies a smooth lateral wind field with light damping to the pretrained Gaussian cloud to study coherent deformation under a spatially varying external force.
+
+### Wind Strength Ablation
+
+Reuses the wind-field setup while varying only the wind magnitude. The notebook compares a low-wind variant (`wind_scale = 0.1`), the medium-wind baseline from the main wind experiment, and a high-wind variant (`wind_scale = 4.0`).
+
+These experiments are simple baselines rather than full physical models. They are intended to study how direct motion updates and force magnitude affect the rendered appearance of pretrained Gaussian splats.
 
 ## Known Limitations
 
@@ -162,8 +179,8 @@ These experiments are simple baselines rather than full physical models. They ar
 ## Next Steps
 
 - Refactor loading, rendering, and update logic out of the notebook
-- Add more physics update rules and scene experiments
-- Compare simple baselines against more structured physical updates
+- Compare the current baselines against more structured physical updates
+- Add lightweight quantitative summaries for motion magnitude and visual coherence
 - Introduce lightweight tests once the physics update code stabilizes
 
 ## References
