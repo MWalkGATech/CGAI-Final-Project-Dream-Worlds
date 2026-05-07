@@ -84,7 +84,9 @@ cd CGAI-Final-Project-Dream-Worlds
 conda env create --file environment.yml -y
 conda activate gaussian_splatting
 
-export TORCH_CUDA_ARCH_LIST="12.0"
+# Only set this on RTX 50-series / SM 12.0 GPUs.
+# For other NVIDIA GPUs, leave TORCH_CUDA_ARCH_LIST unset so builds target your local GPU.
+# export TORCH_CUDA_ARCH_LIST="12.0"
 
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 pip install -r requirements.txt --no-build-isolation --upgrade
