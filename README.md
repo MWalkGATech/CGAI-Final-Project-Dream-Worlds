@@ -5,11 +5,27 @@
 ![Topic](https://img.shields.io/badge/Topic-Physics%20Simulation%20on%20Gaussian%20Splats-2b8a3e)
 ![Status](https://img.shields.io/badge/Status-Working%20Prototype-228be6)
 
-This repository contains a working prototype for exploring simple physics updates on pretrained Gaussian splats. The current codebase is centered around `3dgs_testing.ipynb`, which loads a pretrained ficus scene, applies basic motion rules to Gaussian positions, renders frame sequences, and exports demo videos.
+This repository contains our CGAI Dream Worlds final project on adding physical dynamics to Gaussian Splatting. We start from pretrained 3D Gaussian Splatting scene representations and study how simple physics-based updates can be applied to Gaussian primitives so that they exhibit motion while preserving recognizable visual structure.
 
-This is a CGAI Dream Worlds technical exploration project by Ethan Villalovoz and Michael Walker.
+The current repository is a working prototype centered around one notebook, `3dgs_testing.ipynb`, with two exploratory experiments and exported demo videos.
 
-## Current Status
+## Project Overview
+
+Gaussian Splatting is an effective representation for high-quality rendering, but it is typically used for static scenes. This project explores what happens when Gaussian primitives are treated as dynamic elements whose positions can be updated over time using simple physical rules.
+
+Our goal is not to reproduce a full physically accurate pipeline. Instead, we are using a lightweight prototype to study a narrower question: how can pretrained Gaussian splat representations be modified to exhibit motion while still preserving the object's recognizable appearance?
+
+## Research Question
+
+How can pretrained Gaussian splat representations be updated with simple physical motion while maintaining visual coherence in the rendered object?
+
+## Relation to Prior Work
+
+This project is inspired by recent work such as PhysGaussian and GASP, which explore physically grounded motion and simulation-aware manipulation for 3D Gaussians. Those systems are significantly more complete and compute-intensive than the prototype in this repository.
+
+Our implementation is deliberately smaller in scope. It focuses on exploratory motion rules applied to pretrained Gaussians so that we can study behavior, rendering effects, and practical limitations before attempting a more complete simulation pipeline.
+
+## Current Prototype Status
 
 - One working notebook prototype: `3dgs_testing.ipynb`
 - Two current experiments: wall smash and mass falling
@@ -132,6 +148,8 @@ Applies uniform gravity in the negative `y` direction to all Gaussians and clamp
 
 Applies gravity in the negative `z` direction and scales motion by randomized inverse mass, then clamps positions into the range `[-10, 10]`.
 
+These experiments are simple baselines rather than full physical models. They are intended to provide a starting point for studying how direct motion updates affect the rendered appearance of pretrained Gaussian splats.
+
 ## Known Limitations
 
 - The project is still notebook-first and not yet refactored into reusable Python modules.
@@ -144,12 +162,15 @@ Applies gravity in the negative `z` direction and scales motion by randomized in
 
 - Refactor loading, rendering, and update logic out of the notebook
 - Add more physics update rules and scene experiments
+- Compare simple baselines against more structured physical updates
 - Introduce lightweight tests once the physics update code stabilizes
 
 ## References
 
 - Official final project document: https://cgai-gatech.vercel.app/assignment/Final_doc
 - Gaussian Splatting fork used in this repo: https://github.com/yindaheng98/gaussian-splatting.git
+- PhysGaussian: https://openaccess.thecvf.com/content/CVPR2024/html/Xie_PhysGaussian_Neural_Physics-Informed_3D_Gaussians_for_Physics-Based_View_Synthesis_CVPR_2024_paper.html
+- GASP: https://www.sciencedirect.com/science/article/pii/S0097849325001774
 - CUDA 12.8 install notes:
   - https://github.com/graphdeco-inria/gaussian-splatting/issues/1215
   - https://github.com/graphdeco-inria/gaussian-splatting/issues/1313
