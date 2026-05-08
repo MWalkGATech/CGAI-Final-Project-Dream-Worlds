@@ -30,19 +30,27 @@ Our implementation is deliberately smaller in scope. It focuses on exploratory m
 - One working notebook prototype: `notebooks/gaussian_splatting_physics.ipynb`
 - Four experiments: uniform gravity, randomized inverse-mass motion, wind-field deformation, and a wind-strength ablation
 - Five exported demo videos stored under `assets/demos/`
-- Local pretrained inputs and generated frame sequences stored under `output/` and ignored by git
+- Local pretrained inputs stored under `output/` and generated frame sequences stored under `assets/images/`, both ignored by git
 
 ## Repository Layout
 
 ```text
 .
 ├── assets/
-│   └── demos/
-│       ├── mass_falling.mp4
-│       ├── wind_field.mp4
-│       ├── wind_field_high.mp4
-│       ├── wind_field_low.mp4
-│       └── wall_smash.mp4
+│   ├── demos/
+│   │   ├── mass_falling.mp4
+│   │   ├── wind_field.mp4
+│   │   ├── wind_field_high.mp4
+│   │   ├── wind_field_low.mp4
+│   │   └── wall_smash.mp4
+│   └── images/
+│       └── ficus_whitebg-trained/
+│           └── images/
+│               ├── mass_falling/
+│               ├── wall_smash/
+│               ├── wind_field/
+│               ├── wind_field_high/
+│               └── wind_field_low/
 ├── notebooks/
 │   └── gaussian_splatting_physics.ipynb
 ├── output/
@@ -50,17 +58,13 @@ Our implementation is deliberately smaller in scope. It focuses on exploratory m
 │       ├── cameras.json
 │       ├── depths/
 │       ├── images/
-│       ├── point_cloud/
-│       └── results/
-│           ├── wind_field/
-│           ├── wind_field_high/
-│           └── wind_field_low/
+│       └── point_cloud/
 ├── README.md
 ├── environment.yml
 └── requirements.txt
 ```
 
-`output/` is used for local pretrained assets and generated frame sequences, so it is intentionally git-ignored. The experiment-specific subdirectories under `results/` are created when the wind experiments are run.
+`output/` is used for local pretrained assets and is intentionally git-ignored. Generated frame sequences are written under `assets/images/` and should also stay out of version control.
 
 ## Requirements
 
@@ -119,7 +123,6 @@ mkdir -p output
 gdown --folder "https://drive.google.com/drive/folders/1Bl51dHBoTt08T3RBtslM93UIIk9C_gSB?usp=sharing" -O output
 
 unzip output/ficus_whitebg-trained.zip -d output
-mkdir -p output/ficus_whitebg-trained/results
 ```
 
 After extraction, the important paths should exist:
@@ -127,7 +130,6 @@ After extraction, the important paths should exist:
 ```text
 output/ficus_whitebg-trained/cameras.json
 output/ficus_whitebg-trained/point_cloud/iteration_30000/point_cloud.ply
-output/ficus_whitebg-trained/results/
 ```
 
 ## Running the Notebook
@@ -137,11 +139,11 @@ output/ficus_whitebg-trained/results/
 3. If you want a clean rerun, delete old rendered PNGs:
 
    ```bash
-   find output/ficus_whitebg-trained/results -type f -name '*.png' -delete
+   find assets/images/ficus_whitebg-trained/images -type f -name '*.png' -delete
    ```
 
 4. Run the notebook from top to bottom.
-5. The render cells write PNG frames into `output/ficus_whitebg-trained/results/` and, for the wind experiments, into experiment-specific subdirectories under that folder.
+5. The render cells write PNG frames into `assets/images/ficus_whitebg-trained/images/<experiment_name>/`.
 6. The export cells write demo videos to:
 
    - `assets/demos/wall_smash.mp4`
